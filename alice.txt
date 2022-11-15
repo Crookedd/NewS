@@ -1,0 +1,77 @@
+/*******************************************
+ *  Автор:Игнатьева Валерия.               *
+ *  Дата: 08.11.2022                       *
+ *  Группа: ПИ-221                         *
+ *  Название: частота повторений           *
+ *******************************************/
+ 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+using namespace std;
+
+//https://onlinegdb.com/Pv3kRlhTH
+
+void oneLetter (string emptyString) {
+  cout << "число повторений буквы:"  << endl << endl; 
+  map<string, int> letters;
+  for (int index = 0; index < emptyString.size(); ++index) {
+    string letter = emptyString.substr(index, 1); // задаём длину letter.
+    auto enumeration = letters.find(letter); //узнаём есть ли letter в контейнере
+    if (enumeration == letters.end()) { //если enumeration достиг конца контейнера, то всем буквам присваеваем значение 1
+        letters[letter] = 1;
+    } else {
+      ++enumeration->second; //если нет, то enumeration сравнивает значение со следующем,если они похожи, то увеличивается на 1
+    }               //если не похожи, то перходит к следующей букве 
+  }
+  for (auto pair : letters) //передаём из контейнера элементы в pair (цикл for-each)
+    if (pair.second > 1 ) {
+      cout << pair.first << " - " << pair.second << endl;
+    }
+}
+
+void twoLetter(string emptyString) {
+  cout << endl <<  "число повторений двухбуквенных словосочетаний :"  << endl << endl; 
+  map<string, int> phrases;
+  for (int index = 0; index < emptyString.size(); ++index) {
+    string phrase = emptyString.substr(index, 2);
+    auto enumeration = phrases.find(phrase);
+    if (enumeration == phrases.end()) {
+        phrases[phrase] = 1;
+    } else {
+      ++enumeration->second;
+    }
+  }
+  for (auto pair : phrases)
+  if (pair.second > 1) {
+    cout << pair.first << " - " << pair.second << endl;
+  }
+}
+
+
+int main() {
+  ifstream fin;
+  fin.open("text");
+    
+  if (!fin.is_open()) {
+    cout << "Такого файла нет, проверьте его наличие." << endl;
+    return 0;
+    }
+    
+  //создаём строку без пробелов и символов
+  string str, emptyString;
+  while (getline(fin, str)) {
+    for (int index = 0; index < str.size(); ++index) {
+      if ((str[index] >= 'a' && str[index] <= 'z')) {
+       emptyString += str[index];
+      }
+    }
+  }
+    
+  oneLetter(emptyString);
+  twoLetter(emptyString);
+    
+  fin.close();
+  return 0;
+}
